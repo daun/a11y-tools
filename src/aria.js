@@ -51,35 +51,31 @@ export function ariaCurrent(container, current = true) {
 }
 
 export function ariaExpand(
-  expander,
-  expandingContainer = null,
-  expanderLabel = '',
-  expanderLabelEl = null
+  toggleEl,
+  { label = '', labelEl = null, container = null }
 ) {
-  expander.setAttribute('aria-expanded', 'true')
-  if (expanderLabel) {
-    expanderLabelEl.textContent = expanderLabel
-  } else {
-    expander.textContent = expanderLabel
+  toggleEl.setAttribute('aria-expanded', 'true')
+  if (container) {
+    container.setAttribute('aria-hidden', 'false')
   }
-  if (expandingContainer) {
-    expandingContainer.setAttribute('aria-hidden', 'false')
+  if (labelEl) {
+    labelEl.textContent = label
+  } else if (label) {
+    toggleEl.textContent = label
   }
 }
 
 export function ariaContract(
-  expander,
-  expandingContainer = null,
-  expanderLabel = '',
-  expanderLabelEl = null
+  toggleEl,
+  { label = '', labelEl = null, container = null }
 ) {
-  expander.setAttribute('aria-expanded', 'false')
-  if (expanderLabel) {
-    expanderLabelEl.textContent = expanderLabel
-  } else {
-    expander.textContent = expanderLabel
+  toggleEl.setAttribute('aria-expanded', 'false')
+  if (container) {
+    container.setAttribute('aria-hidden', 'true')
   }
-  if (expandingContainer) {
-    expandingContainer.setAttribute('aria-hidden', 'true')
+  if (labelEl) {
+    labelEl.textContent = label
+  } else if (label) {
+    toggleEl.textContent = label
   }
 }
