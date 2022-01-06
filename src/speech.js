@@ -2,7 +2,7 @@ import OnDemandLiveRegion from 'on-demand-live-region'
 
 let liveRegion
 
-export function announce(message) {
+export function speak(message) {
   if (!liveRegion) {
     liveRegion = new OnDemandLiveRegion()
   }

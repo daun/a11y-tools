@@ -7,12 +7,12 @@ export function ariaShow(container) {
   container.removeAttribute('hidden')
 }
 
-export function ariaPress(button) {
-  button.setAttribute('aria-pressed', 'true')
+export function ariaDisable(container) {
+  container.setAttribute('aria-disabled', 'true')
 }
 
-export function ariaUnpress(button) {
-  button.setAttribute('aria-pressed', 'false')
+export function ariaEnable(container) {
+  container.setAttribute('aria-disabled', 'false')
 }
 
 export function ariaCheck(button) {
@@ -31,12 +31,12 @@ export function ariaUnselect(container) {
   container.setAttribute('aria-selected', 'false')
 }
 
-export function ariaDisable(container) {
-  container.setAttribute('aria-disabled', 'true')
+export function ariaPress(button) {
+  button.setAttribute('aria-pressed', 'true')
 }
 
-export function ariaEnable(container) {
-  container.setAttribute('aria-disabled', 'false')
+export function ariaUnpress(button) {
+  button.setAttribute('aria-pressed', 'false')
 }
 
 export function ariaCurrent(container, current = true) {
