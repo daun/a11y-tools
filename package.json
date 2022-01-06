@@ -1,0 +1,63 @@
+{
+  "name": "a11y-tools",
+  "description": "Simple accessibility helpers",
+  "version": "1.0.0",
+  "author": "Philipp Daun <daun@daun.ltd>",
+  "license": "MIT",
+  "source": "src/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.module.js",
+  "esmodule": "dist/index.modern.js",
+  "unpkg": "dist/index.umd.js",
+  "scripts": {
+    "lint": "eslint src",
+    "clean": "rimraf dist",
+    "bundle": "microbundle && microbundle -f umd --external none",
+    "build": "npm run clean && npm run bundle",
+    "prepublish": "npm run clean && npm run lint && npm run build",
+    "release": "npm run build && git commit -am v$npm_package_version && git tag v$npm_package_version && git push && git push --tags && npm publish"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daun/a11y-tools"
+  },
+  "keywords": [
+    "javascript",
+    "a11y",
+    "accessibility",
+    "aria",
+    "focus",
+    "speech"
+  ],
+  "bugs": {
+    "url": "https://github.com/daun/a11y-tools/issues"
+  },
+  "homepage": "https://github.com/daun/a11y-tools",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "codecov": "^3.7.2",
+    "eslint": "^7.3.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-prettier": "^3.1.4",
+    "esm": "^3.2.25",
+    "jsdom": "16.2.2",
+    "jsdom-global": "3.0.2",
+    "microbundle": "^0.12.1",
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0",
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "focus-options-polyfill": "^1.6.0",
+    "focus-trap": "^6.7.1",
+    "on-demand-live-region": "^0.1.3",
+    "tabbable": "^5.2.1"
+  }
+}
