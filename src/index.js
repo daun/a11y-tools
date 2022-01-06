@@ -1,7 +1,8 @@
+import 'focus-options-polyfill'
+
 import { createFocusTrap } from 'focus-trap'
 import { tabbable } from 'tabbable'
 import OnDemandLiveRegion from 'on-demand-live-region'
-import 'focus-options-polyfill'
 
 export function ariaHide(container) {
   container.setAttribute('aria-hidden', 'true')
@@ -55,27 +56,45 @@ export function ariaCurrent(container, current = true) {
   }
 }
 
-export function ariaExpand(expander, expandingContainer = null, expanderLabel = '', expanderLabelEl = null) {
+export function ariaExpand(
+  expander,
+  expandingContainer = null,
+  expanderLabel = '',
+  expanderLabelEl = null
+) {
   expander.setAttribute('aria-expanded', 'true')
   if (expanderLabel) {
-    (expanderLabelEl || expander).textContent = expanderLabel
+    expanderLabelEl.textContent = expanderLabel
+  } else {
+    expander.textContent = expanderLabel
   }
   if (expandingContainer) {
     expandingContainer.setAttribute('aria-hidden', 'false')
   }
 }
 
-export function ariaContract(expander, expandingContainer = null, expanderLabel = '', expanderLabelEl = null) {
+export function ariaContract(
+  expander,
+  expandingContainer = null,
+  expanderLabel = '',
+  expanderLabelEl = null
+) {
   expander.setAttribute('aria-expanded', 'false')
   if (expanderLabel) {
-    (expanderLabelEl || expander).textContent = expanderLabel
+    expanderLabelEl.textContent = expanderLabel
+  } else {
+    expander.textContent = expanderLabel
   }
   if (expandingContainer) {
     expandingContainer.setAttribute('aria-hidden', 'true')
   }
 }
 
-export function ariaTrapFocus(focusElement, unfocusElements = [], initialFocus = null) {
+export function ariaTrapFocus(
+  focusElement,
+  unfocusElements = [],
+  initialFocus = null
+) {
   // If required, traverse for background elements
   if (unfocusElements === true) {
     unfocusElements = ariaGetFocusTrapBackgroundElements(focusElement)
@@ -148,7 +167,10 @@ export function ariaGetFocusTarget(focusContainer, initialFocus = null) {
   return tabbable(focusContainer)[0]
 }
 
-export function ariaGetFocusTrapBackgroundElements(focusContainer, untilParent = 'body') {
+export function ariaGetFocusTrapBackgroundElements(
+  focusContainer,
+  untilParent = 'body'
+) {
   const upperParent = focusContainer.closest(untilParent) || document.body
 
   const parents = []
@@ -159,8 +181,8 @@ export function ariaGetFocusTrapBackgroundElements(focusContainer, untilParent =
   }
 
   return parents.reduce((all, el) => {
-    const siblings = Array.from(el.parentNode?.children || [])
-    const siblingsExceptSelf = siblings.filter(sibling => sibling !== el)
+    const siblings = Array.from((el.parentNode || {}).children || [])
+    const siblingsExceptSelf = siblings.filter((sibling) => sibling !== el)
     return all.concat(siblingsExceptSelf)
   }, [])
 }
