@@ -5,8 +5,7 @@ import { tabbable } from 'tabbable'
 
 export function trapFocus(
   focusElement,
-  unfocusElements = [],
-  initialFocus = null
+  { unfocusElements = true, initialFocus = null } = {}
 ) {
   // If required, traverse for background elements
   if (unfocusElements === true) {
@@ -17,23 +16,24 @@ export function trapFocus(
   focusElement.setAttribute('aria-hidden', 'false')
 
   // Trap focus inside element
-  getFocusTrap(focusElement, initialFocus).activate()
+  getFocusTrap(focusElement, { initialFocus }).activate()
 
   // Only hide other elements *after* we move focus out of it
-  Array.from(unfocusElements).forEach((element) => {
+  Array.from(unfocusElements || []).forEach((element) => {
     element.dataset.ariaHiddenBefore = element.getAttribute('aria-hidden')
     element.setAttribute('aria-hidden', 'true')
   })
 
   // Return function to restore focus
-  return () => restoreFocus(focusElement, unfocusElements)
+  return () => restoreFocus(focusElement, { unfocusElements })
 }
 
-export function restoreFocus(focusElement, unfocusElements = []) {
+export function restoreFocus(focusElement, { unfocusElements = [] } = {}) {
   // Restore background *before* we move focus into it
   focusElement.setAttribute('aria-hidden', 'true')
 
-  Array.from(unfocusElements).forEach((element) => {
+  // Restore aria-hidden as before focus trap
+  Array.from(unfocusElements || []).forEach((element) => {
     let ariaHiddenBefore = element.dataset.ariaHiddenBefore
     if (ariaHiddenBefore === 'null') {
       ariaHiddenBefore = null
@@ -52,20 +52,24 @@ export function restoreFocus(focusElement, unfocusElements = []) {
 
 const focusTraps = new WeakMap()
 
-export function getFocusTrap(focusElement, initialFocus = null) {
+export function getFocusTrap(
+  focusElement,
+  { initialFocus = null, options = {} } = {}
+) {
   if (focusTraps.has(focusElement)) {
     return focusTraps.get(focusElement)
   }
 
   // Find the first tabbable element for focus
-  const focusTarget = getFocusTarget(focusElement, initialFocus)
+  const focusTarget = getFocusTarget(focusElement, { initialFocus })
 
   const focusTrap = createFocusTrap(focusElement, {
     initialFocus: focusTarget,
     fallbackFocus: focusElement,
     preventScroll: true,
     escapeDeactivates: false,
-    allowOutsideClick: true
+    allowOutsideClick: true,
+    ...options
   })
 
   focusTraps.set(focusElement, focusTrap)
@@ -73,7 +77,7 @@ export function getFocusTrap(focusElement, initialFocus = null) {
   return focusTrap
 }
 
-export function getFocusTarget(focusContainer, initialFocus = null) {
+export function getFocusTarget(focusContainer, { initialFocus = null } = {}) {
   if (initialFocus) {
     return tabbable(focusContainer).find(initialFocus)
   }
@@ -82,7 +86,7 @@ export function getFocusTarget(focusContainer, initialFocus = null) {
 
 export function getFocusTrapBackgroundElements(
   focusContainer,
-  untilParent = 'body'
+  { untilParent = 'body' } = {}
 ) {
   const upperParent = focusContainer.closest(untilParent) || document.body
 
@@ -100,7 +104,7 @@ export function getFocusTrapBackgroundElements(
   }, [])
 }
 
-export function focus(focusContainer, scroll = true) {
+export function focus(focusContainer, { scroll = true } = {}) {
   const focusTarget = getFocusTarget(focusContainer)
   if (focusTarget) {
     focusTarget.focus({ preventScroll: !scroll })
